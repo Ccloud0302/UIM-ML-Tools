@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+        namespace="com.markerhub.mapper.knowledgeGraphMapper">
+    <select id="getDomains" resultType="map">
+		SELECT * FROM knowledgegraphdomain where status=1  
+	</select>
+    <select id="getDomainList" resultType="map">
+        SELECT * FROM knowledgegraphdomain
+        <where>
+            status=1 and sserviceId=#{sserviceId}
+            <if test="domainname!='' and domainname!=null">
+                and name like '%${domainname}%'
+            </if>
+        </where>
+        order by id desc
+    </select>
+    <select id="getDomainByName" resultType="map" parameterType="String">
+		SELECT * FROM knowledgegraphdomain WHERE status=1 and name =#{domainname}	 
+	</select>
+    <select id="getDomainById" resultType="map" parameterType="Integer">
+		SELECT * FROM knowledgegraphdomain WHERE status=1 and id =#{domainid}	 
+	</select>
+
+    <insert id="saveDomain" parameterType="map">
+        INSERT INTO knowledgegraphdomain(name, createuser,nodecount, shipcount,status, sserviceId) VALUES (#{params.name},#{params.createuser},#{params.nodecount},#{params.shipcount},1, #{params.sserviceId})
+    </insert>
+    <update id="updateDomain" parameterType="map">
+        UPDATE knowledgegraphdomain 
+        SET 
+        name =#{params.name} ,
+        createuser=#{params.createuser} ,
+        nodecount=#{params.nodecount},
+        shipcount=#{params.shipcount},
+        WHERE id = #{params.id}
+    </update>
+    <update id="deleteDomain" parameterType="Integer">
+        UPDATE knowledgegraphdomain SET status = 0 WHERE id = #{id}
+    </update>
+
+
+    <insert id="saveNodeImage" parameterType="java.util.List">
+        insert knowledgenodedetailfile
+        (Domainid,NodeId,FileName,ImageType,CreateUser,CreateTime,Status)
+        values
+        <foreach collection="maplist" item="item" separator=",">
+            (#{item.domainid},#{item.nodeid} ,#{item.file}
+            ,#{item.imagetype},#{item.createuser},#{item.createtime},#{item.status})
+        </foreach>
+    </insert>
+    <insert id="saveNodeContent" parameterType="map">
+		insert knowledgenodedetail
+		(Domainid,NodeId,Content,CreateUser,CreateTime,Status)
+		values
+		(#{params.domainid},#{params.nodeid} ,#{params.content} ,#{params.createuser},#{params.createtime},#{params.status})
+	</insert>
+    <update id="updateNodeContent" parameterType="map">
+        UPDATE knowledgenodedetail SET Content =#{params.content} ,ModifyTime=#{params.modifytime} WHERE Domainid=#{params.domainid} and NodeId = #{params.nodeid}
+    </update>
+    <select id="getNodeImageList" resultType="map">
+		SELECT * from knowledgenodedetailfile where Status=1 and  Domainid=#{domainid} and NodeId=#{nodeid}
+	</select>
+    <select id="getNodeContent" resultType="map">
+		SELECT * from knowledgenodedetail where Status=1 and  Domainid=#{domainid} and NodeId=#{nodeid}
+	</select>
+    <update id="deleteNodeImage">
+		update knowledgenodedetailfile set Status=0 where Domainid=#{domainid} and NodeId=#{nodeid}
+	</update>
+
+
+    <insert id="createStatus" useGeneratedKeys="true" keyProperty="id" parameterType="com.markerhub.entity.Status">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
+        INSERT INTO status (
+        id, name, active, des, domainId, nodeId
+        )
+        VALUES (
+        #{id, jdbcType=VARCHAR},#{name, jdbcType=VARCHAR},
+        #{active, jdbcType=INTEGER},#{des, jdbcType=VARCHAR},
+        #{domainId, jdbcType=INTEGER},#{nodeId, jdbcType=INTEGER}
+        )
+    </insert>
+    <select id="getStatusList" resultType="map">
+		SELECT id, name, active, des from status where domainId=#{domainId} and nodeId=#{nodeId}
+	</select>
+    <update id="updateStatus" parameterType="com.markerhub.entity.Status">
+        UPDATE status
+        <set>
+            <if test="name != null">
+                status.name = #{name},
+            </if>
+            <if test="active != null">
+                status.active=#{active},
+            </if>
+            <if test="des != null">
+                status.des=#{des},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    <delete id="deleteStatus" parameterType="String">
+        DELETE FROM status
+        WHERE id = #{statusId}
+    </delete>
+
+
+    <insert id="createOrder" useGeneratedKeys="true" keyProperty="id" parameterType="com.markerhub.entity.Order">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
+        INSERT INTO orders (
+        id, name, duration, des, domainId, nodeId
+        )
+        VALUES (
+        #{id, jdbcType=VARCHAR},#{name, jdbcType=VARCHAR},
+        #{duration, jdbcType=VARCHAR},#{des, jdbcType=VARCHAR},
+        #{domainId, jdbcType=INTEGER},#{nodeId, jdbcType=INTEGER}
+        )
+    </insert>
+    <select id="getOrderList" resultType="map">
+		SELECT id, name, duration, des, domainId, nodeId from orders where domainId=#{domainId} and nodeId=#{nodeId}
+	</select>
+    <update id="updateOrder" parameterType="com.markerhub.entity.Order">
+        UPDATE orders
+        <set>
+            <if test="name != null">
+                orders.name = #{name},
+            </if>
+            <if test="duration != null">
+                orders.duration=#{duration},
+            </if>
+            <if test="des != null">
+                orders.des=#{des},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    <delete id="deleteOrder" parameterType="String">
+        DELETE FROM orders
+        WHERE id = #{orderId}
+    </delete>
+
+
+    <insert id="createAction" useGeneratedKeys="true" keyProperty="id" parameterType="com.markerhub.entity.Action">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
+        INSERT INTO action(
+        id, name, type, des, domainId, nodeId
+        )
+        VALUES (
+        #{id, jdbcType=VARCHAR},#{name, jdbcType=VARCHAR},
+        #{type, jdbcType=VARCHAR},#{des, jdbcType=VARCHAR},
+        #{domainId, jdbcType=INTEGER},#{nodeId, jdbcType=INTEGER}
+        )
+    </insert>
+    <insert id="createParam" useGeneratedKeys="true" keyProperty="id" parameterType="com.markerhub.entity.Param">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
+        INSERT INTO param(
+        id, name, type, des, actionId
+        )
+        VALUES (
+        #{id, jdbcType=VARCHAR},
+        #{name, jdbcType=VARCHAR},#{type, jdbcType=VARCHAR},#{des, jdbcType=VARCHAR},#{actionId, jdbcType=VARCHAR}
+        )
+    </insert>
+    <insert id="createRes" useGeneratedKeys="true" keyProperty="id" parameterType="com.markerhub.entity.Response">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
+        INSERT INTO response(
+        id, code, actionId
+        )
+        VALUES (
+        #{id, jdbcType=VARCHAR}, #{code, jdbcType=VARCHAR}, #{actionId, jdbcType=VARCHAR}
+        )
+    </insert>
+    <select id="getActionList" resultType="map">
+		SELECT id, name, type, des, cause, source from action where domainId=#{domainId} and nodeId=#{nodeId}
+	</select>
+    <select id="getParamListByActionId" resultType="map">
+		SELECT id, name, type, des, actionId from param where actionId=#{actionId}
+	</select>
+    <select id="getCodeListByActionId" resultType="string">
+		SELECT code from response where actionId=#{actionId}
+	</select>
+    <update id="updateAction" parameterType="com.markerhub.entity.Action">
+        UPDATE action
+        <set>
+            <if test="name != null">
+                action.name = #{name},
+            </if>
+            <if test="type != null">
+                action.type=#{type},
+            </if>
+            <if test="des != null">
+                action.des=#{des},
+            </if>
+            <if test="cause != null">
+                action.cause=#{cause},
+            </if>
+            <if test="source != null">
+                action.source=#{source},
+            </if>
+
+        </set>
+        WHERE id = #{id}
+    </update>
+    <update id="updateParam" parameterType="com.markerhub.entity.Param">
+        UPDATE param
+        <set>
+            <if test="name != null">
+                param.name = #{name},
+            </if>
+            <if test="type != null">
+                param.type=#{type},
+            </if>
+            <if test="des != null">
+                param.des=#{des},
+            </if>
+        </set>
+        WHERE id = #{id} and actionId = #{actionId}
+    </update>
+    <delete id="deleteAllResByActionId" parameterType="String">
+        DELETE FROM response
+        WHERE actionId = #{actionId}
+    </delete>
+    <delete id="deleteAction" parameterType="String">
+        DELETE FROM action
+        WHERE id = #{actionId}
+    </delete>
+    <delete id="deleteAllParamsByActionId" parameterType="String">
+        DELETE FROM param
+        WHERE actionId = #{actionId}
+    </delete>
+
+
+    <insert id="createWord" useGeneratedKeys="true" keyProperty="id" parameterType="com.markerhub.entity.Word">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
+        INSERT INTO wordtable(
+        id, name, type, des, domainId
+        )
+        VALUES (
+        #{id, jdbcType=VARCHAR},#{name, jdbcType=VARCHAR},
+        #{type, jdbcType=VARCHAR},#{des, jdbcType=VARCHAR},
+        #{domainId, jdbcType=INTEGER}
+        )
+    </insert>
+    <select id="getWordList" resultType="map">
+		SELECT id, name, type, des from wordtable where domainId=#{domainId}
+	</select>
+    <delete id="deleteWord" parameterType="String">
+        DELETE FROM wordtable
+        WHERE id = #{wordId}
+    </delete>
+    <delete id="deleteWordBydomainId" parameterType="Integer">
+        DELETE FROM wordtable
+        WHERE domainId=#{domainId}
+    </delete>
+    <update id="updateWord" parameterType="com.markerhub.entity.Word">
+        UPDATE wordtable
+        <set>
+            <if test="name != null">
+                wordtable.name = #{name},
+            </if>
+            <if test="type != null">
+                wordtable.type=#{type},
+            </if>
+            <if test="des != null">
+                wordtable.des=#{des},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="getAllMsg" resultType="map">
+		SELECT id, name, type, triggerAction, causeContext, causeAction from msg_transmit where domainid=#{domainId} and sserviceId=#{sserviceId}
+	</select>
+    <select id="getMsg" resultType="map">
+		SELECT id, name, type, triggerAction, causeContext, causeAction, domainid from msg_transmit where sserviceId=#{sserviceId}
+	</select>
+
+    <select id="getDomainsBySsId" resultType="map">
+		SELECT * FROM knowledgegraphdomain where status=1 and sserviceId=#{sserviceId}
+	</select>
+    <select id="getAllActionByDomainId" resultType="map">
+		SELECT * from action where domainId=#{domainId}
+	</select>
+
+
+    <insert id="createMsg" useGeneratedKeys="true" keyProperty="id" parameterType="com.markerhub.entity.Msg">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
+        INSERT INTO msg_transmit(
+        id, name, type, triggerAction, causeContext, causeAction, domainId, sserviceId
+        )
+        VALUES (
+        #{id, jdbcType=VARCHAR},#{name, jdbcType=VARCHAR},
+        #{type, jdbcType=VARCHAR},#{triggerAction, jdbcType=VARCHAR},
+        #{causeContext, jdbcType=VARCHAR},#{causeAction, jdbcType=VARCHAR},
+        #{domainId, jdbcType=INTEGER}, #{sserviceId, jdbcType=INTEGER}
+        )
+    </insert>
+    <delete id="deleteMsg" parameterType="String">
+        DELETE FROM msg_transmit
+        WHERE id = #{msgId}
+    </delete>
+    <delete id="deleteMsgbydomainId" parameterType="Integer">
+        DELETE FROM msg_transmit
+        WHERE domainid=#{domainId}
+    </delete>
+    <update id="updateMsg" parameterType="com.markerhub.entity.Msg">
+        UPDATE msg_transmit
+        <set>
+            <if test="name != null">
+                msg_transmit.name = #{name},
+            </if>
+            <if test="type != null">
+                msg_transmit.type=#{type},
+            </if>
+            <if test="triggerAction != null">
+                msg_transmit.triggerAction=#{triggerAction},
+            </if>
+            <if test="causeContext != null">
+                msg_transmit.causeContext=#{causeContext},
+            </if>
+            <if test="causeAction != null">
+                msg_transmit.causeAction=#{causeAction},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    <update id="updateDomain2" parameterType="com.markerhub.entity.Domain">
+        UPDATE knowledgegraphdomain
+        <set>
+            <if test="name != null">
+                knowledgegraphdomain.name = #{name},
+            </if>
+            <if test="type != null">
+                knowledgegraphdomain.type=#{type},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    <select id="getDomain" resultType="map">
+		SELECT * from knowledgegraphdomain where id=#{domainId}
+	</select>
+
+
+    <insert id="addProcess" useGeneratedKeys="true" keyProperty="id" parameterType="com.markerhub.entity.Process">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
+        INSERT INTO process (
+        id, name, type, des, stepNum, domainId, nodeId, descVisible
+        )
+        VALUES (
+        #{id, jdbcType=VARCHAR},#{name, jdbcType=VARCHAR},
+        #{type, jdbcType=VARCHAR},#{des, jdbcType=VARCHAR},
+        #{stepNum, jdbcType=INTEGER},#{domainId, jdbcType=INTEGER},
+        #{nodeId, jdbcType=INTEGER},#{descVisible ,jdbcType=BOOLEAN}
+        )
+    </insert>
+    <select id="getProcessList" resultType="map">
+		SELECT id, name, type, des, stepNum, descVisible from process where domainId=#{domainId} and nodeId=#{nodeId}
+	</select>
+    <select id="isProcessExist" resultType="map">
+		SELECT id from process where id=#{processId}
+	</select>
+    <update id="updateProcess" parameterType="com.markerhub.entity.Process">
+        UPDATE process
+        <set>
+            <if test="name != null">
+                process.name = #{name},
+            </if>
+            <if test="type != null">
+                process.type=#{type},
+            </if>
+            <if test="des != null">
+                process.des=#{des},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    <delete id="deleteProcess" parameterType="String">
+        DELETE FROM process
+        WHERE id=#{processId}
+    </delete>
+
+
+    <select id="getStepList" resultType="map">
+		SELECT id, step_title, step_num, step_time, inputVisible, timeInputVisible, step_explain, inputValue from step where domainId=#{domainId} and nodeId=#{nodeId}
+	</select>
+    <insert id="addStep" useGeneratedKeys="true" keyProperty="id" parameterType="com.markerhub.entity.Step">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
+        INSERT INTO step (
+        id, step_title, step_num, step_time, inputVisible, timeInputVisible, step_explain, inputValue, domainId, nodeId
+        )
+        VALUES (
+        #{id, jdbcType=VARCHAR},#{step_title, jdbcType=VARCHAR},
+        #{step_num, jdbcType=INTEGER}, #{step_time, jdbcType=VARCHAR},
+        #{inputVisible, jdbcType=BOOLEAN}, #{timeInputVisible, jdbcType=BOOLEAN},
+        #{step_explain, jdbcType=BOOLEAN}, #{inputValue, jdbcType=VARCHAR},
+        #{domainId, jdbcType=INTEGER}, #{nodeId, jdbcType=INTEGER}
+        )
+    </insert>
+    <update id="updateStep" parameterType="com.markerhub.entity.Step">
+        UPDATE step
+        <set>
+            <if test="step_title != null">
+                step.step_title = #{step_title},
+            </if>
+            <if test="step_time != null">
+                step.step_time=#{step_time},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    <delete id="deleteStep" parameterType="String">
+        DELETE FROM step
+        WHERE id = #{stepId, jdbcType=VARCHAR}
+    </delete>
+
+
+    <select id="getStepTag" resultType="map">
+		SELECT id, name, type, stepNum, list from steptag where domainId=#{domainId} and nodeId=#{nodeId}
+	</select>
+    <insert id="addStepTag" useGeneratedKeys="true" keyProperty="id" parameterType="com.markerhub.entity.StepTag">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
+        INSERT INTO steptag (
+        id, name, type, stepNum, list, domainId, nodeId
+        )
+        VALUES (
+        #{id, jdbcType=VARCHAR},#{name, jdbcType=VARCHAR},
+        #{type, jdbcType=VARCHAR},#{stepNum, jdbcType=INTEGER},
+        #{list, jdbcType=VARCHAR}, #{domainId, jdbcType=INTEGER},
+        #{nodeId, jdbcType=INTEGER}
+        )
+    </insert>
+    <delete id="deleteStepTag" parameterType="String">
+        DELETE FROM steptag
+        WHERE id = #{stepTagId, jdbcType=VARCHAR}
+    </delete>
+
+    <delete id="deleteProcessByStepNum" parameterType="Integer">
+        DELETE FROM process
+        WHERE nodeId=#{nodeId} and stepNum = #{stepNum, jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteStepTagByStepNum" parameterType="Integer">
+        DELETE FROM steptag
+        WHERE nodeId=#{nodeId} and stepNum = #{stepNum, jdbcType=INTEGER}
+    </delete>
+
+
+    <insert id="saveMxGraph" useGeneratedKeys="true" keyProperty="id" parameterType="com.markerhub.entity.MxGraph">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
+        INSERT INTO mxgraph (
+        id, graphData, sserviceId
+        )
+        VALUES (
+        #{id, jdbcType=VARCHAR},#{graphData, jdbcType=VARCHAR},#{sserviceId, jdbcType=INTEGER}
+        )
+    </insert>
+    <delete id="deleteMxGraphBySserviceId" parameterType="Integer">
+        DELETE FROM mxgraph
+        WHERE sserviceId = #{sserviceId, jdbcType=INTEGER}
+    </delete>
+    <select id="getMxGraph" resultType="String" parameterType="Integer">
+		SELECT graphData from mxgraph where sserviceId=#{sserviceId, jdbcType=INTEGER}
+	</select>
+
+    <insert id="saveStateFlow" useGeneratedKeys="true" keyProperty="id" parameterType="com.markerhub.entity.StateFlow">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
+        INSERT INTO stateflow (
+        id, graphData, nodeId, domainId, mode
+        )
+        VALUES (
+        #{id, jdbcType=VARCHAR},#{graphData, jdbcType=VARCHAR},#{nodeId, jdbcType=INTEGER},#{domainId, jdbcType=INTEGER}, #{mode, jdbcType=VARCHAR}
+        )
+    </insert>
+    <delete id="deleteStateFlowByNodeIdAndDomainId">
+        DELETE FROM stateflow
+        WHERE nodeId = #{nodeId, jdbcType=INTEGER} and domainId = #{domainId, jdbcType=INTEGER} and mode = #{mode, jdbcType=VARCHAR}
+    </delete>
+    <select id="getStateFlow" resultType="String">
+		SELECT graphData from stateflow where nodeId = #{nodeId, jdbcType=INTEGER} and domainId = #{domainId, jdbcType=INTEGER} and mode = #{mode, jdbcType=VARCHAR}
+	</select>
+
+
+    <select id="getStateActionList" resultType="map">
+		SELECT id, des, stateName, mode, num from stateaction where domainId=#{domainId} and nodeId=#{nodeId} and stateName=#{stateName} and mode=#{mode}
+	</select>
+    <insert id="addStateAction" useGeneratedKeys="true" keyProperty="id" parameterType="com.markerhub.entity.StateAction">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
+        INSERT INTO stateaction (
+        id, domainId, nodeId, mode, stateName, des, num
+        )
+        VALUES (
+        #{id, jdbcType=VARCHAR},
+        #{domainId, jdbcType=INTEGER}, #{nodeId, jdbcType=INTEGER},
+        #{mode, jdbcType=VARCHAR}, #{stateName, jdbcType=VARCHAR},
+        #{des, jdbcType=VARCHAR}, #{num, jdbcType=INTEGER}
+        )
+    </insert>
+    <update id="updateStateAction" parameterType="com.markerhub.entity.StateAction">
+        UPDATE stateaction
+        <set>
+            <if test="num != null">
+                stateaction.num=#{num},
+            </if>
+            <if test="des != null">
+                stateaction.des = #{des},
+            </if>
+            <if test="mode != null">
+                stateaction.mode=#{mode},
+            </if>
+            <if test="stateName != null">
+                stateaction.stateName=#{stateName},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    <delete id="deleteStateAction" parameterType="String">
+        DELETE FROM stateaction
+        WHERE id = #{stateActionId, jdbcType=VARCHAR}
+    </delete>
+    <update id="updateStateActionName" parameterType="String">
+        UPDATE stateaction
+        <set>
+            stateaction.stateName=#{newName},
+        </set>
+        WHERE domainId=#{domainId} and nodeId=#{nodeId} and stateName=#{oldName}
+    </update>
+    <delete id="deleteParamByParamId" parameterType="String">
+        DELETE FROM param
+        WHERE id = #{paramId}
+    </delete>
+
+
+    <select id="getUserAttrList" resultType="map">
+		SELECT id, attrLabel, attrValue from userattrs where domainId=#{domainId} and nodeId=#{nodeId}
+	</select>
+    <select id="getUserAttr" resultType="String">
+		SELECT attrValue from userattrs where attrLabel=#{attrLabel}
+	</select>
+    <select id="isUserAttrExist" resultType="map">
+		SELECT id from userattrs where id=#{attrId}
+	</select>
+    <insert id="createUserAttr" parameterType="com.markerhub.entity.UserAttr">
+        INSERT INTO userattrs (
+        id, domainId, nodeId, attrLabel, attrValue
+        )
+        VALUES (
+        #{id, jdbcType=VARCHAR},
+        #{domainId, jdbcType=INTEGER}, #{nodeId, jdbcType=INTEGER},
+        #{attrLabel, jdbcType=VARCHAR}, #{attrValue, jdbcType=VARCHAR}
+        )
+    </insert>
+    <update id="updateUserAttr" parameterType="com.markerhub.entity.UserAttr">
+        UPDATE userattrs
+        <set>
+            <if test="attrLabel != null">
+                userattrs.attrLabel=#{attrLabel},
+            </if>
+            <if test="attrValue != null">
+                userattrs.attrValue=#{attrValue},
+            </if>
+        </set>
+        WHERE domainId=#{domainId} and nodeId=#{nodeId} and id=#{id}
+    </update>
+    <delete id="deleteUserAttrById" parameterType="String">
+        DELETE FROM userattrs
+        WHERE id = #{attrId}
+    </delete>
+
+</mapper>

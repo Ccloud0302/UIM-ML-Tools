@@ -1,0 +1,101 @@
+{
+    "contextName":"Welding",
+    "BoundedContext":{
+        "entityList":[
+            {
+                "car":{
+                    "code":"car",
+                    "color":"#1E90FF",
+                    "modelVersion":"V1.0",
+                    "userAttr":[
+                        {
+                            "id":"1665214203945",
+                            "attrValue":"-10,-195,170,0,-25,-90",
+                            "attrLabel":"Spare solder joint 1"
+                        },
+                        {
+                            "id":"1665214221761",
+                            "attrValue":"10,-195,170,0,-25,-90",
+                            "attrLabel":"Spare solder joint 2"
+                        },
+                        {
+                            "id":"1665214236264",
+                            "attrValue":"30,-195,170,0,-25,-90",
+                            "attrLabel":"Spare solder joint 3"
+                        },
+                        {
+                            "id":"1665215327145",
+                            "attrValue":"-10,195,165,0,-25,90",
+                            "attrLabel":"Spare solder joint 4"
+                        },
+                        {
+                            "id":"1665215337816",
+                            "attrValue":"10,195,165,0,-25,90",
+                            "attrLabel":"Spare solder joint 5"
+                        },
+                        {
+                            "id":"1665215357033",
+                            "attrValue":"30,195,165,0,-25,90",
+                            "attrLabel":"Spare solder joint 6"
+                        }
+                    ],
+                    "alias":"A car with a spliced roof",
+                    "language":"zh",
+                    "translated":"true",
+                    "uuid":"10914",
+                    "fx":870,
+                    "r":30,
+                    "fy":324,
+                    "namespace":"weld.split",
+                    "name":"car",
+                    "extendable":"false",
+                    "type":"source",
+                    "state":[
+
+                    ],
+                    "event":[
+
+                    ]
+                },
+                "Weldingmanipulator":{
+                    "code":"Welding manipulator",
+                    "namespace":"weld.split",
+                    "type":"device",
+                    "state":[
+                        {
+                            "State":[
+                                {
+                                    "des":"Soldering",
+                                    "name":"Repair",
+                                    "id":"18e05562-ac2e-43b5-ac9f-ce0ffdc15623",
+                                    "action":[
+                                        {
+                                            "name":"repair",
+                                            "params":[
+                                                {
+                                                    "name":"Coordinates of solder joint",
+                                                    "type":"String",
+                                                    "des":"The coordinates of solder joint"
+                                                }
+                                            ],
+                                            "des":"Action of soldering"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "Mode":"Production"
+                        }
+                    ]
+                }
+            }
+        ],
+        "relationship":[
+            {
+                "sourceid":"10906",
+                "targetid":"10914",
+                "name":"weld",
+                "uuid":"10615"
+            }
+        ]
+    }
+}
