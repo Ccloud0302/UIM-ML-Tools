@@ -1,0 +1,799 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2014 (http://www.altova.com) by  () -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:complexType name="UIMDocumentType">
+		<xs:annotation>
+			<xs:documentation>The UIMDocumentType is the top level type for UIM model.	</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="UIMPId" type="xs:string" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>The UUId for the UIMDocument identifying it uniquely.				</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="UIMModel" type="UIMModelType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The Meta-Model.	</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>The required n attribute is the number of actual component sets in this list.			</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="UIMModelType">
+		<xs:annotation>
+			<xs:documentation>The UIMModelType is the type for UIMModel.	    </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="UIMBoundedContextSubGroup" type="UIMBoundedContextSubGroupType" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>The BoundedContextSubGroup of the model.    </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>The id of the model.			</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="name" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation> The name of the model.			</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="UIMBoundedContextSubGroupType">
+		<xs:annotation>
+			<xs:documentation>The UIMBoundedContextSubGroupType is the type for UIMBoundedContextSubGroup.  </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="UIMBoundedContext" type="UIMBoundedContextType" minOccurs="1" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>The BoundedContexts in the model.			    </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="n" type="xs:integer">
+			<xs:annotation>
+				<xs:documentation>The number of bounded contexts elements.	</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="UIMBoundedContextType">
+		<xs:annotation>
+			<xs:documentation>The UIMModelType is the type for UIMModel.	</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="EntitySubGroup" type="EntitySubGroupType" minOccurs="1" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>The entities in the bounded context.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Glossary" type="GlossaryType" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>The glossary of the bounded context.	</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>The id of bounded context.          </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="name" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>The name of bounded context.			</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute ref="BoundedContext" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="GlossaryType">
+		<xs:annotation>
+			<xs:documentation>The UIMModelType is the type for UIMModel.	</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="id" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>The id of glossary.			</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="name" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>The name of glossary.			</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="type" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>The type of glossary.			</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="des" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>The description of glossary.			</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="EntitySubGroupType">
+		<xs:annotation>
+			<xs:documentation>The EntitySubGroupType is the type for EntitySubGroup.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Entity" type="EntityType" minOccurs="1" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>The entities in a bounded context.				</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="n" type="xs:integer">
+			<xs:annotation>
+				<xs:documentation>The number of entities elements.	</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="EntityType">
+		<xs:annotation>
+			<xs:documentation>The UIMModelType is the type for UIMModel.	</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="Attributes" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The optional Attributes element contains user define attributes (typified, binary array, or XML structured).				</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="StateFlowSubGroup" type="StateFlowSubGroupType" minOccurs="1" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>The stateflow subgroup of the entity.				</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EventSubGroup" type="EventSubGroupType" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>The event subgroup of the entity.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>The id of entity.			</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="name" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>The name of entity.			</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="type" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>The type of entity.			</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="StateFlowSubGroupType">
+		<xs:annotation>
+			<xs:documentation>The StateFlowSubGroupType is the type for StateFlowSubGroup.		</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="StateFlow" type="StateFlowType" minOccurs="1" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>The StateFlow of the entity.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="n" type="xs:integer">
+			<xs:annotation>
+				<xs:documentation>The number of stateflows elements.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="StateFlowType">
+		<xs:annotation>
+			<xs:documentation>The UIMModelType is the type for UIMModel.		</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="StateSubGroup" type="StateSubGroupType" minOccurs="1" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>The state subgroup of stateflow.		    </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CommandSubGroup" type="CommandSubGroupType" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>The command subgroup of the entity.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>The id of stateflow.			</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="name" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>The name of stateflow.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute ref="mode" use="required">
+			<xs:annotation>
+				<xs:documentation>The mode of stateflow.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="des" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>The description of stateflow.			</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="CommandSubGroupType">
+		<xs:annotation>
+			<xs:documentation>The CommandSubGroup is the type for commandsubgroup.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Command" type="CommandType" minOccurs="1" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>The commands in the stateflow.	</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="n" type="xs:integer">
+			<xs:annotation>
+				<xs:documentation>The number of command elements.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="CommandType">
+		<xs:annotation>
+			<xs:documentation>The UIMModelType is the type for UIMModel.	</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="id" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>The id of command.			</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="name" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>The name of command.			</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="des" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>The description of command.			</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="StateSubGroupType">
+		<xs:annotation>
+			<xs:documentation>The StateSubGroup is the type for statesubgroup.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="State" type="StateType" minOccurs="1" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>The states in the stateflow.	</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="n" type="xs:integer">
+			<xs:annotation>
+				<xs:documentation>The number of state elements.		 </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="StateType">
+		<xs:annotation>
+			<xs:documentation>The UIMModelType is the type for UIMModel.	     </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="PreCommandSubGroup" type="PreCommandSubGroupType" minOccurs="1" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>The pre-command subgroup of state.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PostCommandSubGroup" type="PostCommandSubGroupType" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>The post-command subgroup of state.	</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ActionSubGroup" type="ActionSubGroupType" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>The action subgroup of state.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>The id of state.		 </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute ref="stateName" use="required">
+			<xs:annotation>
+				<xs:documentation>The name of state.			 </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="state" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>The state of state.			 </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="des" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>The description of state.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="PreCommandSubGroupType">
+		<xs:annotation>
+			<xs:documentation>The PreCommandSubGroupType is the type for precommandsubgroup.	     </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="PreCommand" type="CommandType" minOccurs="1" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>The precommands of state.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="n" type="xs:integer">
+			<xs:annotation>
+				<xs:documentation>The number of precommands elements.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="PostCommandSubGroupType">
+		<xs:annotation>
+			<xs:documentation>The PostCommandSubGroupType is the type for postcommandsubgroup.     </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="PostCommand" type="CommandType" minOccurs="1" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>The postcommands of state.   </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="n" type="xs:integer">
+			<xs:annotation>
+				<xs:documentation>The number of postcommands elements. </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ActionSubGroupType">
+		<xs:annotation>
+			<xs:documentation>The ActionSubGroupType is the type for actionsubgroup.	  </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Action" type="ActionType" minOccurs="1" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>The actions of state.			</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="n" type="xs:integer">
+			<xs:annotation>
+				<xs:documentation>The number of actions elements.  </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ActionType">
+		<xs:annotation>
+			<xs:documentation>The ActionType is the type for Action.		 </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ParamSubGroup" type="ParamSubGroupType" minOccurs="1" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>The parameter subgroup of state.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>The id of action.         </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="name" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>The name of action.     </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute ref="mode" use="required">
+			<xs:annotation>
+				<xs:documentation>The mode of action.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute ref="stateName" use="required">
+			<xs:annotation>
+				<xs:documentation>The state of action.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="des" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>The description of command.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ParamSubGroupType">
+		<xs:annotation>
+			<xs:documentation>The ParamSubGroup is the type for paramsubgroup.	  </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Param" type="ParamType" minOccurs="1" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>The parameters of action.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="n" type="xs:integer">
+			<xs:annotation>
+				<xs:documentation>The number of parameters elements.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ParamType">
+		<xs:annotation>
+			<xs:documentation>The ParamType is the type for Param.   </xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="id" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>The id of parameter.     </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="name" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>The name of parameter.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="type" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>The type of parameter.       </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="des" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>The description of parameter.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="EventSubGroupType">
+		<xs:annotation>
+			<xs:documentation>The EventSubGroupType is the type for EventSubGroup.	  </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Event" type="EventType" minOccurs="1" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>The event of the entity.   </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="n" type="xs:integer">
+			<xs:annotation>
+				<xs:documentation>The number of events elements.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="EventType">
+		<xs:annotation>
+			<xs:documentation>The UIMModelType is the type for UIMModel.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="id" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>The id of event.        </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="name" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>The name of event.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="type" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>The type of event.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="cause" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>Specific events caused by it.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="source" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>The source of event.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="des" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>The description of glossary.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:element name="UIMDocument" type="UIMDocumentType">
+		<xs:annotation>
+			<xs:documentation>The root element of the model named "uncertainty in manufacture."</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:attribute name="stateName">
+		<xs:annotation>
+			<xs:documentation>The name of state.       </xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string"/>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="BoundedContext">
+		<xs:annotation>
+			<xs:documentation>The type of bounded context.      </xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="Common"/>
+				<xs:enumeration value="Core"/>
+				<xs:enumeration value="Custom"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="mode">
+		<xs:annotation>
+			<xs:documentation>The type of mode for stateflow.     </xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="Production"/>
+				<xs:enumeration value="Maintenance"/>
+				<xs:enumeration value="Manual"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
+
+	<xs:complexType name="Uncertainty">
+		<xs:annotation>
+			<xs:documentation>The type of Uncertainty.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="prop" type="xs:decimal" use="required">
+		</xs:attribute>
+		<xs:attribute name="times" type="xs:int" use="required">
+		</xs:attribute>
+	</xs:complexType>
+
+	<xs:complexType name="UncertaintyInProductionOrganizationType">
+		<xs:annotation>
+			<xs:documentation>The type of Uncertainty in production organization.</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="BusinessSegmentationAndAssociation" type="Uncertainty"/>
+			<xs:element name="TaktTime" type="Uncertainty"/>
+			<xs:element name="RandomProduction" type="Uncertainty"/>
+			<xs:element name="ScenarioDiversity" type="Uncertainty"/>
+			<xs:element name="ProductionSequence" type="Uncertainty"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:complexType name="EnvironmentalUncertaintyType">
+		<xs:annotation>
+			<xs:documentation>The type of Environmental uncertainty.</xs:documentation>
+		</xs:annotation>
+	</xs:complexType>
+
+	<xs:complexType name="StructuralUncertainty">
+		<xs:annotation>
+			<xs:documentation>The type of Structural Uncertainty.</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="UncertaintyInProductionOrganization" type="UncertaintyInProductionOrganizationType"/>
+			<xs:element name="EnvironmentalUncertainty" type="EnvironmentalUncertaintyType"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:complexType name="RequirementUncertaintyType">
+		<xs:annotation>
+			<xs:documentation>The type of Requirement UncertaintyType.</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="UpdateOfRequirement" type="Uncertainty"/>
+			<xs:element name="IncompleteRequirement" type="Uncertainty"/>
+			<xs:element name="UnreasonableRequirement" type="Uncertainty"/>
+			<xs:element name="AbsenceOfNon-functionalRequirements" type="Uncertainty"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:complexType name="SupplyUncertaintyType">
+		<xs:annotation>
+			<xs:documentation>The type of Supply UncertaintyType.</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="SubstandardQuantityOrQualityOfRawMaterials" type="Uncertainty"/>
+			<xs:element name="SupplyOrpriceFluctuation" type="Uncertainty"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:complexType name="InputUncertainty">
+		<xs:annotation>
+			<xs:documentation>The type of Input Uncertainty.</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="RequirementUncertainty" type="RequirementUncertaintyType"/>
+			<xs:element name="SupplyUncertainty" type="SupplyUncertaintyType"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:complexType name="ProcessUncertaintyType">
+		<xs:annotation>
+			<xs:documentation>The type of Process Uncertainty.</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="ProcessParameters" type="Uncertainty"/>
+			<xs:element name="ProcessPlanning" type="Uncertainty"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:complexType name="EquipmentUncertaintyType">
+		<xs:annotation>
+			<xs:documentation>The type of  Equipment Uncertainty.</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="EquipmentParameters" type="Uncertainty"/>
+			<xs:element name="EquipmentStatus" type="Uncertainty"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:complexType name="ResourceUncertaintyType">
+		<xs:annotation>
+			<xs:documentation>The type of Resource Uncertainty.</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="Materials" type="Uncertainty"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:complexType name="UncertaintyBetweenEquipmentType">
+		<xs:annotation>
+			<xs:documentation>The type of Uncertainty Between Equipment.</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="Relationship" type="Uncertainty"/>
+			<xs:element name="CommunicationStability" type="Uncertainty"/>
+			<xs:element name="CommunicationDataQualitys" type="Uncertainty"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:complexType name="UncertaintyAmongCEDType">
+		<xs:annotation>
+			<xs:documentation>The type of Uncertainty Among CED.</xs:documentation>
+		</xs:annotation>
+	</xs:complexType>
+	
+	<xs:complexType name="ParameterUncertainty">
+		<xs:annotation>
+			<xs:documentation>The type of Parameter Uncertainty.</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="ProcessUncertainty" type="ProcessUncertaintyType"/>
+			<xs:element name="EquipmentUncertainty" type="EquipmentUncertaintyType"/>
+			<xs:element name="ResourceUncertainty" type="ResourceUncertaintyType"/>
+			<xs:element name="UncertaintyBetweenEquipment" type="UncertaintyBetweenEquipmentType"/>
+			<xs:element name="UncertaintyAmongCED" type="UncertaintyAmongCEDType"/>
+		</xs:choice>
+	</xs:complexType>
+
+
+	<xs:element name="Attributes" type="AttributesType">
+		<xs:annotation>
+			<xs:documentation>The Attributes element is a list of entity attributes.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="AttributesType">
+		<xs:annotation>
+			<xs:documentation>The AttributesType defines a list of entity attributes. </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="Attribute" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Each Attribute element is an entity attribute.  </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="n" type="NaturalType" use="required">
+			<xs:annotation>
+				<xs:documentation>
+          The required n attribute is the number of entity attributes in
+          this list.
+        </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:simpleType name="NaturalType">
+		<xs:annotation>
+			<xs:documentation>The NaturalType is the natural number type (integer > 0).</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:unsignedInt">
+			<xs:minInclusive value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="Attribute" type="AttributeBaseType" abstract="true">
+		<xs:annotation>
+			<xs:documentation>The global Attribute element is the head of a substitution group.
+Any element that is a member of the group may be substituted for
+the Attribute element anywhere the Attribute element may be used in an instance file.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="AttributeUser" type="AttributeUserType" substitutionGroup="Attribute">
+		<xs:annotation>
+			<xs:documentation>The global AttributeUser element is a user-defined entity attribute
+which contains a binary array or any user-defined structured XML data.
+      </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="AttributeBaseType" abstract="true">
+		<xs:annotation>
+			<xs:documentation>The AttributeBaseType is the abstract base type for all entity attributes present in the CAD scene.     </xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="name" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>
+          The required name attribute is the name of the entity attribute.
+          This name is a unique identifier of an attribute within the
+          entity.
+        </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="AttributeUserType">
+		<xs:annotation>
+			<xs:documentation>The AttributeUserType defines a user-defined entity attribute which contains a binary array or any user-defined structured XML data.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="AttributeBaseType">
+				<xs:sequence>
+					<xs:choice>
+						<xs:annotation>
+							<xs:documentation>This compositor selects the representation method for data of the user-defined entity attribute.      </xs:documentation>
+						</xs:annotation>
+						<xs:element name="UserDataXML" type="UserDataXMLType">
+							<xs:annotation>
+								<xs:documentation>The UserDataXML element is the user-defined data                represented as an XML structure.     </xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="UserDataBinary" type="BinaryDataType">
+							<xs:annotation>
+								<xs:documentation>The UserDataBinary element is a binary block of user data.      </xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:choice>
+				</xs:sequence>
+				<xs:attribute name="nameUserAttribute" type="xs:string" use="required">
+					<xs:annotation>
+						<xs:documentation>The required nameUserAttribute attribute is the name of user-defined attribute type. The structure of the user-defined attribute can be identified by this name. </xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="UserDataXMLType">
+		<xs:annotation>
+			<xs:documentation>The UserDataXMLType defines a user-defined XML structure from any namespace that is not the target namespace. The XML processor will
+validate elements if the corresponding schema will be presented. If
+the schema cannot be obtained, no errors will occur.  </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+            This 'any' specifier specifies that the content must be from
+            another namespace and lax verification should be applied to
+            that content.
+          </xs:documentation>
+				</xs:annotation>
+			</xs:any>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="BinaryDataType">
+		<xs:annotation>
+			<xs:documentation>The BinaryDataType represents a Base64-encoded arbitrary binary
+data block. For base64Binary data the entire binary stream is encoded using the Base64 Alphabet in RFC 2045.    </xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:base64Binary">
+				<xs:attribute name="count" type="NaturalType" use="required">
+					<xs:annotation>
+						<xs:documentation>The required count attribute is the number of bytes in the
+binary block.       </xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+</xs:schema>
